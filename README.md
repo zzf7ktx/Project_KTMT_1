@@ -1,11 +1,17 @@
 # Project_KTMT_1
 ...
+
+v:
+x:
+
 P1: INT
  
   class BigInt
+  
   {
   
   private:
+  
 	  int Seg[4] = { 0 };
   
   public:
