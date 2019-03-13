@@ -24,8 +24,8 @@ P1: INT
 	  BigInt& operator+(const BigInt&); // v
 	  BigInt& operator-(BigInt&); // v
 	  BigInt& operator-(); // Hoàn thành
-	  BigInt& operator*(const BigInt&); // x
-	  BigInt& operator/(const BigInt&); // x
+	  BigInt& operator*(const BigInt&); // v
+	  BigInt& operator/(const BigInt&); // Cai cuoi
 	  
 	  bool operator==(const BigInt&); // v
 	  bool operator<=(const BigInt&); // v
