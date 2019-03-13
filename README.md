@@ -1,7 +1,7 @@
 # Project_KTMT_1
 ...
 
-v:
+v: complete
 x:
 
 P1: INT
@@ -23,7 +23,7 @@ P1: INT
 	  
 	  BigInt& operator+(const BigInt&); // v
 	  BigInt& operator-(BigInt&); // v
-	  BigInt& operator-(); // Hoàn thành
+	  BigInt& operator-(); // v
 	  BigInt& operator*(const BigInt&); // v
 	  BigInt& operator/(const BigInt&); // Cai cuoi
 	  
