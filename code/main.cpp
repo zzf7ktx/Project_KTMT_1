@@ -5,6 +5,27 @@
 
 using namespace std;
 
+string binPlusOne(string& A)
+{
+	int sur = 1;
+	int temp;
+	string res = A;
+
+	for (int i = 0; i < A.length() - 1; i++)
+	{
+		temp = res[res.length() - 1 - i] - 48;
+		res[res.length() - 1 - i] = (sur != temp) + 48;
+		sur = temp && sur;
+	}
+
+	if (sur == 1)
+	{
+		res = res + '0';
+	}
+
+	return res;
+}
+
 string binToHex(string& A)
 {
 	string res;
@@ -114,17 +135,36 @@ string twoPowDec(int index)
 
 string binToDec(string& A)
 {
+	int neg = 0;
+	int i;
 	string res = "0";
 	string mul = "0";
-	int i;
+	string temp = A;
 
-	for (i = 0; i < A.length(); i++)
+	if (temp[0] - 48)
 	{
-		if (A[i] ^ 48)
+		neg = 1;
+
+		for (int i = 0; i < temp.length(); i++)
+		{
+			temp[i] = (temp[i] == 48) + 48;
+		}
+
+		temp = binPlusOne(temp);
+	}
+
+	for (i = 0; i < temp.length(); i++)
+	{
+		if (temp[i] ^ 48)
 		{
 			mul = twoPowDec(A.length() - i - 1);
 			res = decPlusDec(res, mul);
 		}
+	}
+
+	if (neg)
+	{
+		res = '-' + res;
 	}
 
 	return res;
@@ -150,27 +190,6 @@ string decDivTwo(string& A)
 		{
 			res = res + (char)(temp / 2 + 48);
 		}
-	}
-
-	return res;
-}
-
-string binPlusOne(string& A)
-{
-	int sur = 1;
-	int temp;
-	string res = A;
-	
-	for (int i = 0; i < A.length() - 1; i++)
-	{
-		temp = res[res.length() - 1 - i] - 48;
-		res[res.length() - 1 - i] = (sur != temp) + 48;
-		sur = temp && sur;
-	}
-
-	if (sur == 1)
-	{
-		res = res + '0';
 	}
 
 	return res;
@@ -311,9 +330,6 @@ int BigInt::Scanf(int base)
 		Seg[(MAX - 1 - i) / 32] = Seg[(MAX - 1 - i) / 32] | (temp[temp.length() - i - 1] - 48)*(1 << (i) % 32);
 	}
 
-	// 11100
-	// 000100
-	// 000100
 	return 1;
 }
 
@@ -460,13 +476,14 @@ BigInt& BigInt::operator<<(const int& num)
 	for (int i = 0; i < num; i++)
 	{
 		temp->Seg[0] = temp->Seg[0] << 1;
-		temp->Seg[0] = temp->Seg[0] | (temp->Seg[1] >> 31);
-
+		temp->Seg[0] = temp->Seg[0] | ((temp->Seg[1] >> 31) & 1);
+		
 		temp->Seg[1] = temp->Seg[1] << 1;
-		temp->Seg[1] = temp->Seg[1] | (temp->Seg[2] >> 31);
-
+		temp->Seg[1] = temp->Seg[1] | ((temp->Seg[2] >> 31) & 1);
+		
 		temp->Seg[2] = temp->Seg[2] << 1;
-		temp->Seg[2] = temp->Seg[2] | (temp->Seg[3] >> 31);
+		temp->Seg[2] = temp->Seg[2] | ((temp->Seg[3] >> 31) & 1);
+		
 
 		temp->Seg[3] = temp->Seg[3] << 1;
 		
@@ -545,12 +562,41 @@ BigInt& BigInt::operator-(BigInt& B)
 	return *C;
 }
 
+BigInt& BigInt::operator*(const BigInt& B)
+{
+	BigInt* C = new BigInt;
+	BigInt* temp = new BigInt;
+	*temp = *this;
+
+	for (int i = 0; i < MAX; i++)
+	{
+		if ((B.Seg[(MAX - i - 1) / 32] >> (i % 32)) & 1)
+		{
+			*C = *C + *temp;
+		}
+		*temp = (*temp) << 1;
+	}
+
+	return *C;
+}
+
 int main()
 {
+	
 	BigInt* A = new BigInt;
 
 	A->Scanf(10);
-	A->Printf(16);
+	
+	BigInt* B = new BigInt;
+
+	B->Scanf(10);
+
+	BigInt* C = new BigInt;
+
+	*C = (*A)*(*B);
+
+	cout << endl;
+	C->Printf(10);
 
 	cin.ignore();
 	cin.get();
