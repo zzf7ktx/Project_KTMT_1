@@ -1,6 +1,6 @@
 # Project_KTMT_1
 ...
-
+COMPLETE
 v: complete
 x:
 
@@ -25,7 +25,7 @@ P1: INT
 	  BigInt& operator-(BigInt&); // v
 	  BigInt& operator-(); // v
 	  BigInt& operator*(const BigInt&); // v
-	  BigInt& operator/(const BigInt&); // Cai cuoi
+	  BigInt& operator/(const BigInt&); // v
 	  
 	  bool operator==(const BigInt&); // v
 	  bool operator<=(const BigInt&); // v
