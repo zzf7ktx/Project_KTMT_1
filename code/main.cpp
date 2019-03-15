@@ -277,7 +277,7 @@ string hexToBin(string& A)
 class BigInt
 {
 private:
-	int Seg[4] = { 0 };
+	unsigned int Seg[4] = { 0 };
 public:
 	int Scanf(int); //
 	int Scanf(string);
@@ -288,7 +288,7 @@ public:
 	BigInt& operator-(BigInt&); // 
 	BigInt& operator-(); //
 	BigInt& operator*(const BigInt&);
-	BigInt& operator/(const BigInt&);
+	BigInt& operator/(BigInt&);
 
 	bool operator==(const BigInt&); //
 	bool operator<=(const BigInt&); //
@@ -343,6 +343,10 @@ void BigInt::Printf(int base)
 	{
 		temp = (Seg[i / 32] >> ((MAX - 1 - i) % 32)) & 1;
 		res += (char)(temp + 48);
+		if ((i + 1) % 32 == 0)
+		{
+			//res += ' ';
+		}
 	}
 
 	switch (base)
@@ -418,34 +422,202 @@ BigInt& BigInt::operator=(const BigInt& B)
 	return *this;
 }
 
+// Adj
 bool BigInt::operator<(const BigInt& B)
 {
-	if (Seg[0] < B.Seg[0]) return 1;
-	if (Seg[1] < B.Seg[1]) return 1;
-	if (Seg[2] < B.Seg[2]) return 1;
-	if (Seg[3] < B.Seg[3]) return 1;
+	if ((Seg[0] >> 31) ^ (B.Seg[0] >> 31)) // 0 1 , 1 0
+	{
+		if (Seg[0] >> 31)
+		{
+			return 0;
+		}
+		else
+		{
+			return 1;
+		}
+	}
+
+	if (Seg[0] >> 31)
+	{
+		if (Seg[0] > B.Seg[0])
+		{
+			return 1;
+		}
+		else if (Seg[0] < B.Seg[0])
+		{
+			return 0;
+		}
+
+		if (Seg[1] > B.Seg[1])
+		{
+			return 1;
+		}
+		else if (Seg[1] < B.Seg[1])
+		{
+			return 0;
+		}
+		if (Seg[2] > B.Seg[2])
+		{
+			return 1;
+		}
+		else if (Seg[2] < B.Seg[2])
+		{
+			return 0;
+		}
+
+		if (Seg[3] > B.Seg[3])
+		{
+			return 1;
+		}
+		else if (Seg[3] < B.Seg[3])
+		{
+			return 0;
+		}
+	}
+	else
+	{
+		if (Seg[0] < B.Seg[0])
+		{
+			return 1;
+		}
+		else if (Seg[0] > B.Seg[0])
+		{
+			return 0;
+		}
+
+		if (Seg[1] < B.Seg[1])
+		{
+			return 1;
+		}
+		else if (Seg[1] > B.Seg[1])
+		{
+			return 0;
+		}
+
+		if (Seg[2] < B.Seg[2])
+		{
+			return 1;
+		}
+		else if (Seg[2] > B.Seg[2])
+		{
+			return 0;
+		}
+
+		if (Seg[3] < B.Seg[3])
+		{
+			return 1;
+		}
+		else if (Seg[3] > B.Seg[3])
+		{
+			return 0;
+		}
+	}
 
 	return 0;
 }
 
+// Adj
 bool BigInt::operator>(const BigInt& B)
 {
-	if (Seg[0] > B.Seg[0]) return 1;
-	if (Seg[1] > B.Seg[1]) return 1;
-	if (Seg[2] > B.Seg[2]) return 1;
-	if (Seg[3] > B.Seg[3]) return 1;
+	if ((Seg[0] >> 31) ^ (B.Seg[0] >> 31)) // 0 1 , 1 0
+	{
+		if (Seg[0] >> 31)
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	if (Seg[0] >> 31)
+	{
+		if (Seg[0] < B.Seg[0])
+		{
+			return 1;
+		}
+		else if (Seg[0] > B.Seg[0])
+		{
+			return 0;
+		}
+
+		if (Seg[1] < B.Seg[1])
+		{
+			return 1;
+		}
+		else if ( Seg[1] > B.Seg[1])
+		{
+			return 0;
+		}
+
+		if (Seg[2] < B.Seg[2])
+		{
+			return 1;
+		}
+		else if (Seg[2] > B.Seg[2])
+		{
+			return 0;
+		}
+
+		if (Seg[3] < B.Seg[3])
+		{
+			return 1;
+		}
+		else if (Seg[3] > B.Seg[3])
+		{
+			return 0;
+		}
+	}
+	else
+	{
+		if (Seg[0] > B.Seg[0])
+		{
+			return 1;
+		}
+		else if (Seg[0] < B.Seg[0])
+		{
+			return 0;
+		}
+
+		if (Seg[1] > B.Seg[1])
+		{
+			return 1;
+		}
+		else if (Seg[1] < B.Seg[1])
+		{
+			return 0;
+		}
+		if (Seg[2] > B.Seg[2])
+		{
+			return 1;
+		}
+		else if (Seg[2] < B.Seg[2])
+		{
+			return 0;
+		}
+
+		if (Seg[3] > B.Seg[3])
+		{
+			return 1;
+		}
+		else if (Seg[3] < B.Seg[3])
+		{
+			return 0;
+		}
+	}
 
 	return 0;
 }
 
 bool BigInt::operator==(const BigInt& B)
 {
-	if (Seg[0] == B.Seg[0]) return 1;
-	if (Seg[1] == B.Seg[1]) return 1;
-	if (Seg[2] == B.Seg[2]) return 1;
-	if (Seg[3] == B.Seg[3]) return 1;
+	if (Seg[0] != B.Seg[0]) return 0;
+	if (Seg[1] != B.Seg[1]) return 0;
+	if (Seg[2] != B.Seg[2]) return 0;
+	if (Seg[3] != B.Seg[3]) return 0;
 
-	return 0;
+	return 1;
 }
 
 bool BigInt::operator<=(const BigInt& B)
@@ -499,17 +671,16 @@ BigInt& BigInt::operator>>(const int& num)
 	
 	for (int i = 0; i < num; i++)
 	{
-		temp->Seg[3] = temp->Seg[3] >> 1;
-		temp->Seg[3] = temp->Seg[3] | (temp->Seg[2] & 1);
+		temp->Seg[3] = (temp->Seg[3]) >> 1;
+		temp->Seg[3] = temp->Seg[3] | ((1 & temp->Seg[2]) << 31);
 
 		temp->Seg[2] = temp->Seg[2] >> 1;
-		temp->Seg[2] = temp->Seg[2] | (temp->Seg[1] & 1);
+		temp->Seg[2] = temp->Seg[2] | ((1 & temp->Seg[1]) << 31);
 
 		temp->Seg[1] = temp->Seg[1] >> 1;
-		temp->Seg[1] = temp->Seg[1] | (temp->Seg[0] & 1);
+		temp->Seg[1] = temp->Seg[1] | ((1 & temp->Seg[0]) << 31);
 
 		temp->Seg[0] = temp->Seg[0] >> 1;
-
 	}
 
 	return *temp;
@@ -568,6 +739,7 @@ BigInt& BigInt::operator*(const BigInt& B)
 	BigInt* temp = new BigInt;
 	*temp = *this;
 
+
 	for (int i = 0; i < MAX; i++)
 	{
 		if ((B.Seg[(MAX - i - 1) / 32] >> (i % 32)) & 1)
@@ -580,6 +752,51 @@ BigInt& BigInt::operator*(const BigInt& B)
 	return *C;
 }
 
+BigInt& BigInt::operator/(BigInt& B)
+{
+	BigInt* C = new BigInt;
+	BigInt* temp = new BigInt;
+	BigInt* temp2 = new BigInt;
+
+	int na = MAX - 1;
+	int neg = 0;
+
+	if (this->Seg[0] >> 31)
+	{
+		neg++;
+		*this = -(*this);
+	}
+
+	if (B.Seg[0] >> 31)
+	{
+		neg++;
+		B = -B;
+	}
+
+	while (na + 1)
+	{
+		*temp2 = (*this >> na) - *temp;
+		*C = *C << 1;
+
+		if (*temp2 >= B)
+		{
+			C->Seg[3] = C->Seg[3] | 1;
+			*temp = *temp + B;
+		}
+	
+		*temp = *temp << 1;
+		na--;
+	}
+
+	if (neg % 2 == 0)
+	{
+		return *C;
+	}
+
+	return -(*C);
+	
+}
+	 
 int main()
 {
 	
@@ -593,7 +810,7 @@ int main()
 
 	BigInt* C = new BigInt;
 
-	*C = (*A)*(*B);
+	*C = (*A) / (*B);
 
 	cout << endl;
 	C->Printf(10);
